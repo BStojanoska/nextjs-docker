@@ -1,0 +1,91 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Organization {
+  id      Int     @id @default(autoincrement())
+  name    String
+  studies Study[]
+
+  @@unique([name])
+}
+
+model Topic {
+  id        Int                @id @default(autoincrement())
+  name      String?
+  studies   Study[]
+  topics    StudiesTopics[]
+  subtopics StudiesSubTopics[]
+
+  @@unique([name])
+}
+
+model Category {
+  id      Int                 @id @default(autoincrement())
+  name    String?
+  studies StudiesCategories[]
+
+  @@unique([name])
+}
+
+enum Status {
+  final
+  draft
+}
+
+model Study {
+  id               Int     @id @default(autoincrement())
+  title            String
+  issued_year      Int?
+  web_link         String
+  download_link    String?
+  organization_id  Int?
+  topic_id         Int
+  status           Status  @default(final)
+  open_for_comment Boolean @default(false)
+  summary          String?
+  assigned_score   Int?
+
+  organization Organization? @relation(fields: [organization_id], references: [id])
+  topic        Topic         @relation(fields: [topic_id], references: [id])
+
+  // Relations for many-to-many between studies and categories/topics
+  categories       StudiesCategories[]
+  StudiesTopics    StudiesTopics[]
+  StudiesSubTopics StudiesSubTopics[]
+}
+
+// Many-to-many relation tables
+model StudiesCategories {
+  studies_id  Int
+  category_id Int
+  study       Study    @relation(fields: [studies_id], references: [id])
+  category    Category @relation(fields: [category_id], references: [id])
+
+  @@id([studies_id, category_id])
+}
+
+model StudiesTopics {
+  studies_id Int
+  topic_id   Int
+  study      Study @relation(fields: [studies_id], references: [id])
+  topic      Topic @relation(fields: [topic_id], references: [id])
+
+  @@id([studies_id, topic_id])
+}
+
+model StudiesSubTopics {
+  studies_id  Int
+  subtopic_id Int
+  study       Study @relation(fields: [studies_id], references: [id])
+  subtopic    Topic @relation(fields: [subtopic_id], references: [id])
+
+  @@id([studies_id, subtopic_id])
+}
