@@ -7,11 +7,24 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    container: {
+      // Overriding the default max-width of the container so I have the ability to use the full width of the screen
+      screens: {
+        sm: "1280px",
+        md: "1280px",
+        lg: "1280px",
+        xl: "1280px",
+        "2xl": "1496px",
+      },
+    },
     extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      colors: {
+        primary: "#334d62",
+        "secondary-text": "#8ca0af",
+        background: "#fcfcfd",
+      },
+      boxShadow: {
+        "default-shadow": "0 1px 2px 0 rgba(16, 24, 40, 0.05)",
       },
     },
   },
