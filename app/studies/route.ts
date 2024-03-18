@@ -10,8 +10,6 @@ export async function GET(req: NextRequest) {
   const limit = 20;
   const skip = (page - 1) * limit;
 
-  console.log(page);
-
   const data = await prisma.study.findMany({
     where: {
       categories: {
