@@ -84,14 +84,14 @@ export default function Table() {
           <tbody>
             {isLoading && (
               <tr>
-                <td colSpan={6} className="p-4 text-2xl">
+                <td colSpan={6} className="p-4 text-sm">
                   Loading...
                 </td>
               </tr>
             )}
             {error && (
               <tr>
-                <td colSpan={6} className="p-4 text-2xl text-red-400">
+                <td colSpan={6} className="p-4 text-sm text-red-400">
                   Something went wrong.
                 </td>
               </tr>
