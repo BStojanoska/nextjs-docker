@@ -43,10 +43,16 @@ export default function Table() {
   // Pagination state - if needed later on
   const [page, setPage] = useState(1);
   const [expanded, setExpanded] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const { isLoading, error, data } = useQuery(["studies", page], () =>
-    axios.get(`/studies?page=${page}`).then((res) => res.data)
-  );
+  const { isLoading, error, data } = useQuery(["studies", page, searchQuery], () => {
+    return axios.get(`/studies?page=${page}&search=${searchQuery}`).then((res) => res.data);
+  });
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPage(1);
+    setSearchQuery(e.target.value);
+  };
 
   return (
     <div
@@ -61,6 +67,7 @@ export default function Table() {
               type="search"
               className="focus:outline-none w-full"
               placeholder="Search"
+              onChange={handleSearch}
             />
           </div>
         </section>
@@ -154,6 +161,18 @@ export default function Table() {
               );
             })}
           </tbody>
+          <tfoot className="h-[60px] align-middle text-center">
+            <tr>
+              <td colSpan={6}>
+                <button onClick={() => setPage(page - 1)}>
+                  {"< Previous"}
+                </button>
+                <button onClick={() => setPage(page + 1)} className="px-3">
+                  {"Next >"}
+                </button>
+              </td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>
